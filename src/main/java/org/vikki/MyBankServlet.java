@@ -33,10 +33,10 @@ public class MyBankServlet extends HttpServlet {
 
 
 
-            var transactions = Application.transactionService.findAllTransactions();
+            var transactions = this.transactionService.findAllTransactions();
 
 
-            response.getWriter().print(Application.objectMapper.writeValueAsString(transactions));
+            response.getWriter().print(this.objectMapper.writeValueAsString(transactions));
         }
 
     }
@@ -49,8 +49,8 @@ public class MyBankServlet extends HttpServlet {
 
            Transaction transaction = Application.transactionService.createTransaction(amount, reference);
            response.setContentType("application/json; charset=UTF-8");
-           Application.objectMapper.findAndRegisterModules();
-           String json = Application.objectMapper.writeValueAsString(transaction);
+           this.objectMapper.findAndRegisterModules();
+           String json = this.objectMapper.writeValueAsString(transaction);
            response.getWriter().print(json);
 
         } else  {
