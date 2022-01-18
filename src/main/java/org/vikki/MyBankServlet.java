@@ -9,7 +9,13 @@ import java.io.IOException;
 
 public class MyBankServlet extends HttpServlet {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper;
+    private TransactionService transactionService;
+
+    public MyBankServlet(ObjectMapper objectMapper, TransactionService transactionService) {
+        this.objectMapper = objectMapper;
+        this.transactionService = transactionService;
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -27,9 +33,10 @@ public class MyBankServlet extends HttpServlet {
 
 
 
-            var transactions = ServiceFactory.transactionService().findAllTransactions();
+            var transactions = Application.transactionService.findAllTransactions();
 
-            response.getWriter().print(objectMapper.writeValueAsString(transactions));
+
+            response.getWriter().print(Application.objectMapper.writeValueAsString(transactions));
         }
 
     }
@@ -40,10 +47,10 @@ public class MyBankServlet extends HttpServlet {
            Integer amount = Integer.parseInt(request.getParameter("amount"));
            String  reference = request.getParameter("reference");
 
-           Transaction transaction = ServiceFactory.transactionService().createTransaction(amount, reference);
+           Transaction transaction = Application.transactionService.createTransaction(amount, reference);
            response.setContentType("application/json; charset=UTF-8");
-           objectMapper.findAndRegisterModules();
-           String json = objectMapper.writeValueAsString(transaction);
+           Application.objectMapper.findAndRegisterModules();
+           String json = Application.objectMapper.writeValueAsString(transaction);
            response.getWriter().print(json);
 
         } else  {
